@@ -2,14 +2,12 @@
 
 A **tiny, local-only** Medallion pipeline (**Raw → Bronze → Silver → Gold**) for **NFL injury CSV** data.
 
-This is the **simpler** version of `nfl-injuries-local`:
-- ✅ keeps the same end-to-end flow
-- ✅ keeps quarantine (bad rows do NOT break the batch)
-- ✅ keeps one file per stage (bronze / silver / gold)
-- ✅ keeps virtual env + Makefile
-- ✅ keeps a schema config file (barebones JSON)
-- ❌ removes ruff linting/formatting
-- ❌ removes separate `config.py` and `io.py` modules
+## Quick Design Facts
+- ✅ Quarantine (bad rows do NOT break the batch)
+- ✅ One file per stage (bronze / silver / gold)
+- ✅ Virtual env + Makefile
+- ✅ Schema config file (barebones JSON)
+- ✅ Runs locally using a Windows-friendly **Bash** workflow (Git Bash)
 
 ---
 
@@ -63,26 +61,70 @@ nfl-injuries-mini-local/
 
 ---
 
-## Quick start
+## Requirements (Windows Bash)
 
-### Requirements
-- Python 3.10+
+This repo assumes you are running **Bash on Windows**, typically:
+- **Git Bash** (from Git for Windows), or
+- **WSL** (Ubuntu, etc.)
 
-### Run end-to-end
+You also need:
+- **Python 3.10+** installed and on PATH
+- Optional but recommended: **make**
+  - If `make` is not found in Git Bash, install it (MSYS2 is the cleanest option), or run the “No make?” commands below.
+
+
+## Common commands
 
 ```bash
+make run          # run full pipeline
+make clean-data   # delete output CSVs (bronze/silver/gold/quarantine)
+make clean-venv   # delete .venv
+make reset        # clean-data + rebuild venv + install + run
+```
+
+---
+
+
+## Quick start (using Makefile)
+
+From the repo root:
+
+```bash
+make help
+make venv
+make install
 make run
 ```
 
-If you prefer running without make:
+That produces:
+- `data/bronze/injuries_bronze.csv`
+- `data/silver/injuries_silver.csv`
+- `data/quarantine/injuries_quarantine.csv`
+- `data/gold/injuries_by_team_week.csv`
+- `data/gold/injuries_by_position.csv`
+
+---
+
+## Manual commands (no make)
+
+From the repo root in Git Bash:
 
 ```bash
+# 1) Create venv
 python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-python scripts/run_pipeline.py
+
+# 2) Install dependencies
+.venv/Scripts/pip install -r requirements.txt
+
+# 3) Run the pipeline
+.venv/Scripts/python scripts/run_pipeline.py
 ```
 
+Run against a specific raw file:
+
+```bash
+.venv/Scripts/python scripts/run_pipeline.py data/raw/injuries_raw.csv
+```
 ---
 
 ## Schema contract (barebones)
@@ -121,7 +163,19 @@ Notes:
 
 ---
 
-## Silver validation rules (what gets quarantined)
+## What each stage does (simple + practical)
+
+### Raw
+- Your input CSV (example: `data/raw/injuries_raw.csv`)
+
+### Bronze (`pipeline/bronze.py`)
+Goal: **make the file consistent**
+- normalizes column names (lowercase, underscores)
+- trims whitespace
+- writes a clean bronze CSV
+
+### Silver (`pipeline/silver.py`)
+Goal: **keep good rows, quarantine bad rows**
 
 Silver applies a few clean rules you’ll see constantly in real pipelines:
 
@@ -148,6 +202,13 @@ Quarantine rows get a `quarantine_reason` string, e.g.:
 ```text
 missing_required_field; invalid_week; duplicate_record
 ```
+
+### Gold (`pipeline/gold.py`)
+Goal: **tiny “analytics-ready” outputs**
+- aggregates injuries by team/week
+- aggregates injuries by position
+
+---
 
 ---
 
@@ -181,18 +242,26 @@ flowchart LR
 
 ---
 
-## Troubleshooting
 
-- If imports fail, you ran the script from the wrong folder.
-  - Run from the repo root:
-    - ✅ `python scripts/run_pipeline.py`
+## Troubleshooting (the usual stuff)
 
-- If everything is quarantined, your raw CSV probably doesn’t match the schema.
-  - Fix the schema JSON or rename columns in Bronze.
+### “ModuleNotFoundError: pipeline …”
+You are running from the wrong directory.
+- ✅ Run from the repo root:
+  - `make run`
+  - or `python scripts/run_pipeline.py`
+
+### Quarantine is huge / silver is tiny
+That usually means the raw file doesn’t match the expected columns/types.
+- check `schema/injuries_schema.json`
+- check your raw column names (Bronze normalizes names, but it can’t invent missing fields)
+
+### `make: command not found`
+You don’t have make installed in your Bash environment.
+- Use the “No make?” commands above, or install make.
 
 ---
 
 ## License
 
 MIT.
-# nfl-injuries-mini-local

@@ -1,0 +1,37 @@
+# Python / Virtual Envs
+.venv/
+venv/
+ENV/
+env/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+dist/
+build/
+
+# OS / Editor junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Generated pipeline outputs (keep only raw inputs)
+data/bronze/*.csv
+data/silver/*.csv
+data/gold/*.csv
+data/quarantine/*.csv
+
+# Track raw inputs
+!data/raw/*.csv
+
+# Optional: temp artifacts
+*.tmp
+*.bak

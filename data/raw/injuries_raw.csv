@@ -1,0 +1,9 @@
+season,week,team,player,position,injury,status,practice_status,report_date
+2025,1,BUF,Josh Allen,QB,shoulder,Questionable,Limited,2025-09-08
+2025,1,KC,Travis Kelce,TE,ankle,Probable,Full,2025-09-08
+2025,1,SF,Christian McCaffrey,RB,hamstring,Out,DNP,2025-09-08
+2025,2,PHI,Jalen Hurts,QB,illness,Doubtful,Limited,2025-09-15
+2025,2,,Some Guy,WR,knee,Out,DNP,2025-09-15
+2025,99,NYJ,Aaron Rodgers,QB,concussion,Questionable,Limited,2025-09-22
+202X,3,DAL,CeeDee Lamb,WR,foot,Questionable,Limited,2025-09-22
+2025,3,MIA,,RB,shoulder,Questionable,Limited,2025-09-22

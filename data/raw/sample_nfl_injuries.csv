@@ -1,0 +1,6 @@
+player_id,player_name,team,position,injury_type,practice_status,report_date,week,season,game_status,notes
+00-0031234,Josh Allen,BUF,QB,Shoulder,LP,2025-10-13,6,2025,Questionable,Limited in practice
+00-0039999,John Doe,NYJ,WR,Hamstring,DNP,2025-10-13,6,2025,Doubtful,Did not practice
+00-0011111,Bad Date,KC,RB,Ankle,LP,10/13/2025,6,2025,Questionable,Non-ISO date should quarantine
+00-0022222,Missing Team,,TE,Concussion,LP,2025-10-13,6,2025,Questionable,Missing team should quarantine
+00-0023333,Invalid Week,DAL,LB,Knee,LP,2025-10-13,99,2025,Out,Week out of range should quarantine

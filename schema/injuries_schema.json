@@ -1,0 +1,17 @@
+{
+  "required": {
+    "season": "int",
+    "week": "int",
+    "team": "str",
+    "player": "str",
+    "position": "str",
+    "injury": "str",
+    "status": "str"
+  },
+  "optional": {
+    "practice_status": "str",
+    "report_date": "date"
+  },
+  "primary_key": ["season", "week", "team", "player", "injury"],
+  "week_range": [1, 22]
+}
