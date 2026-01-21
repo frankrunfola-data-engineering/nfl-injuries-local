@@ -1,4 +1,10 @@
-"""SILVER stage (bronze -> silver + quarantine).
+"""
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+File:    silver.py
+Author:  Frank Runfola
+Date:    11/1/2025
+-------------------------------------------------------------------------------
+SILVER stage (bronze -> silver + quarantine).
 
 Filesystem contract (local):
 - Input:  data/bronze/injuries_bronze.csv
@@ -16,6 +22,7 @@ We keep it intentionally simple and readable:
 
 Bad rows are NOT dropped silently:
 - They are written to quarantine with a `quarantine_reason`.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
 
 from __future__ import annotations
@@ -39,15 +46,20 @@ def _load_schema(schema_path: Path) -> dict:
     with schema_path.open("r", encoding="utf-8") as f:
         return json.load(f)
 
+import pandas as pd
 
 def _append_reason(reason: pd.Series, mask: pd.Series, msg: str) -> pd.Series:
-    """Append msg to reason where mask is True."""
+    # Normalize to pandas "string" dtype so `+` with str is valid (and NA-safe)
+    out = reason.astype("string").fillna("")
 
-    out = reason.copy()
-    needs_sep = (out != "") & mask
-    out = out.where(~needs_sep, out + "; ")
-    out = out.where(~mask, out + msg)
+    # Add separator only when we’re about to append AND there’s already text
+    needs_sep = out.ne("") & mask
+    out = out.mask(needs_sep, out + "; ")
+
+    # Append message where mask is True
+    out = out.mask(mask, out + msg)
     return out
+
 
 
 def run(

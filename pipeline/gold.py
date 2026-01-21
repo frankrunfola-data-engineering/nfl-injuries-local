@@ -1,4 +1,10 @@
-"""GOLD stage (silver -> gold).
+"""
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+File:    gold.py
+Author:  Frank Runfola
+Date:    11/1/2025
+-------------------------------------------------------------------------------
+GOLD stage (silver -> gold).
 
 Filesystem contract (local):
 - Input:  data/silver/injuries_silver.csv
@@ -7,6 +13,7 @@ Filesystem contract (local):
 
 Gold is analytics-ready output (small, denormalized, aggregated).
 Keep it small so you can eyeball the results.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
 
 from __future__ import annotations

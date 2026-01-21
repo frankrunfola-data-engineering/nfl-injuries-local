@@ -33,30 +33,37 @@ After running `make run`, you get:
 ## Folder structure
 
 ```text
-nfl-injuries-mini-local/
-|
-├── data/
-│   ├── raw/                # Source CSV(s) live here (never modified)
-│   ├── bronze/             # Raw ingest copy with normalized headers
-│   ├── silver/             # Clean + validated rows only
-│   ├── gold/               # Aggregations for consumption
-│   └── quarantine/         # Bad rows + reasons
-|
-├── schema/
-│   └── injuries_schema.json  # Barebones schema contract
-|
-├── pipeline/
-│   ├── bronze.py           # raw -> bronze
-│   ├── silver.py           # bronze -> silver + quarantine
-│   ├── gold.py             # silver -> gold
-│   └── runner.py           # orchestration
-|
-├── scripts/
-│   └── run_pipeline.py      # beginner-friendly entrypoint
-|
-├── requirements.txt
-├── Makefile
-└── .gitignore
+NFL-INJURIES-MINI-LOCAL/
+├─ .venv/                         # Local Python virtual environment (don’t commit)
+│
+├─ data/                          # Local data lake (generated + inputs)
+│  ├─ raw/                        # Input CSVs you drop in (source-of-truth for local runs)
+│  ├─ bronze/                     # “As-ingested” standardized copy (minimal changes)
+│  ├─ silver/                     # Validated/cleaned dataset (schema enforced)
+│  ├─ quarantine/                 # Bad rows + rejection reasons (pipeline continues)
+│  └─ gold/                       # Aggregations / analytics-ready outputs
+│
+├─ pipeline/                      # Pipeline package (importable Python modules)
+│  ├─ __pycache__/                # Python bytecode cache (don’t commit)
+│  ├─ raw.py                      # Raw helpers (optional utils for raw stage / IO)
+│  ├─ bronze.py                   # Bronze stage logic: read raw -> write bronze
+│  ├─ silver.py                   # Silver stage logic: validate + quarantine -> write silver/quarantine
+│  ├─ gold.py                     # Gold stage logic: aggregations -> write gold outputs
+│  ├─ paths.py                    # Central “filesystem contract”: repo paths + ensure_dirs()
+│  ├─ reporting.py                # Logging/report helpers (pretty summary output)
+│  └─ runner.py                   # Orchestrator: runs stages and returns PipelineRunResult
+│
+├─ schema/                        # Data contracts (versionable, source-controlled)
+│  └─ injuries_schema.json        # Silver-stage schema used for validation/quarantine rules
+│
+├─ scripts/                       # CLI entrypoints (thin wrappers around pipeline package)
+│  └─ run_pipeline.py             # One-command runner (sets logging, calls runner.run())
+│
+├─ .gitignore                     # Keep junk out of git (data outputs, venv, caches, etc.)
+├─ Makefile                       # Convenience commands (setup/run/clean) for quick demos
+├─ README.md                      # How to run + what it produces (this file)
+└─ requirements.txt               # Python dependencies (pin versions if you want repeatability)
+
 ```
 
 ---

@@ -1,4 +1,10 @@
-"""BRONZE stage (raw -> bronze).
+"""
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+File:    bronze.py
+Author:  Frank Runfola
+Date:    11/1/2025
+-------------------------------------------------------------------------------
+BRONZE stage (raw -> bronze).
 
 Filesystem contract (local):
 - Input:  data/raw/*.csv
@@ -11,6 +17,7 @@ Bronze is intentionally boring:
 - Write out a standardized copy
 
 No heavy validation here. We do that in Silver.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
 
 from __future__ import annotations
